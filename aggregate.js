@@ -12,4 +12,7 @@
 		var state = count.state.getDisplayValue();
 		gs.info('count: {0}, state: {1}', counter, state);
 	}
+
+
+
 }());
