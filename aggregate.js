@@ -1,12 +1,15 @@
-// return total number of record inside a table in this case table is incident
+/* return total number of record inside a table
+* using a second paramete in the addAggregate FUNCTION  will add groupedBy to the returned value
+*/
 (function() {
 	var count = new GlideAggregate('incident');
-	count.addAggregate('COUNT');
+	count.addAggregate('COUNT', 'state');
 	count.query();
-	var counter = 0;
+
 	while(count.next()) {
-		counter = count.getAggregate('COUNT');
-		gs.info('count: {0}',counter);
+		var counter = count.getAggregate('COUNT', 'state');
+		var state = count.state.getDisplayValue();
+		gs.info('count: {0}, state: {1}', counter, state);
 	}
 
 }());
