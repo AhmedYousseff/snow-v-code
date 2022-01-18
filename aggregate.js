@@ -1,19 +1,22 @@
-// Update record in table v1
+/* run in scope KuSS
+* expected run time: < 50 seconds
+* this script is used to triger the Business rule: "CKW DI Set calculated fields"
+*/
 
-(function() {
+(function(){
 
-	var incidentGr = new GlideRecord('incident');
-	incidentGr.query();
-	while(incidentGr.next()) {
+   if (!gs.getCurrentScopeName() === "kuSS") {
+         gs.info("Please run in KuSS scope");
+         return;
+      }
 
-		var updatedOn = incidentGr.getValue('sys_updated_on');
-		var date = new GlideDateTime(updatedOn);
-		gs.info("Befor: " + date.getValue());
-		date.addSeconds(1);
-		gs.info("After: " + date.getValue());
-		incidentGr.sys_updated_on = date;
-		incidentGr.update();
+   var searchLimitQuery = "sys_created_onBETWEENjavascript:gs.dateGenerate('2020-12-31','23:59:59')@javascript:gs.dateGenerate('2021-12-31','23:59:59')";
 
-	}
+   // update multiple records on Delivery information table
+   var deliveryInformationGr = new GlideRecord('x_ckagc_kuss_delivery_information');
+   deliveryInformationGr.addEncodedQuery(searchLimitQuery);
+   deliveryInformationGr.addNullQuery('product');
+   deliveryInformationGr.setValue('sys_updated_on', '2021-10-05','23:59:59');
+   deliveryInformationGr.updateMultiple();
 
 }());
